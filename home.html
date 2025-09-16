@@ -112,11 +112,11 @@
     <div class="image-container">
       <div class="image-container-row">
         <div class="image-item">
-          <img src="Gemini_Generated_Image_v8pcgdv8pcgdv8pc-removebg-preview.png" alt="Current Body">
+          <img src="https://placehold.co/400x400/12122D/A0A0A0?text=Current" alt="Current Body">
           <span class="image-item-label">Current</span>
         </div>
         <div class="image-item">
-          <img src="download.png" alt="After Transformation">
+          <img src="https://placehold.co/400x400/12122D/A0A0A0?text=After" alt="After Transformation">
           <span class="image-item-label">After</span>
         </div>
       </div>
@@ -182,19 +182,23 @@
 
     function startTracking() {
       let last = {x:0, y:0, z:0};
+      let lastStepTime = Date.now();
 
       window.addEventListener("devicemotion", (e) => {
         let acc = e.accelerationIncludingGravity;
         if (!acc) return;
 
         let delta = Math.abs(acc.x - last.x) + Math.abs(acc.y - last.y) + Math.abs(acc.z - last.z);
+        let now = Date.now();
 
-        if (delta > 12) { // adjust threshold if too sensitive
+        if (delta > 18 && (now - lastStepTime) > 500) {  
+          // require stronger shake + cooldown
           steps++;
           calories = steps * 0.04;
           localStorage.setItem("steps", steps);
           localStorage.setItem("calories", calories);
           updateDisplay();
+          lastStepTime = now;
         }
         last = acc;
       });

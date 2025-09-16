@@ -191,7 +191,7 @@
     let delta = Math.abs(acc.x - last.x) + Math.abs(acc.y - last.y) + Math.abs(acc.z - last.z);
     let now = Date.now();
 
-    if (delta > 25 && (now - lastStepTime) > 500) {  // increased threshold from 18 -> 25
+    if (delta > 21 && (now - lastStepTime) > 500) {  // increased threshold from 18 -> 25
       steps++;
       calories = steps * 0.04;
       localStorage.setItem("steps", steps);
@@ -210,4 +210,5 @@
   </script>
 </body>
 </html>
+
 

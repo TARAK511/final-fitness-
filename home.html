@@ -181,28 +181,29 @@
     }
 
     function startTracking() {
-      let last = {x:0, y:0, z:0};
-      let lastStepTime = Date.now();
+  let last = {x:0, y:0, z:0};
+  let lastStepTime = Date.now();
 
-      window.addEventListener("devicemotion", (e) => {
-        let acc = e.accelerationIncludingGravity;
-        if (!acc) return;
+  window.addEventListener("devicemotion", (e) => {
+    let acc = e.accelerationIncludingGravity;
+    if (!acc) return;
 
-        let delta = Math.abs(acc.x - last.x) + Math.abs(acc.y - last.y) + Math.abs(acc.z - last.z);
-        let now = Date.now();
+    let delta = Math.abs(acc.x - last.x) + Math.abs(acc.y - last.y) + Math.abs(acc.z - last.z);
+    let now = Date.now();
 
-        if (delta > 18 && (now - lastStepTime) > 500) {  
-          // require stronger shake + cooldown
-          steps++;
-          calories = steps * 0.04;
-          localStorage.setItem("steps", steps);
-          localStorage.setItem("calories", calories);
-          updateDisplay();
-          lastStepTime = now;
-        }
-        last = acc;
-      });
+    if (delta > 25 && (now - lastStepTime) > 500) {  // increased threshold from 18 -> 25
+      steps++;
+      calories = steps * 0.04;
+      localStorage.setItem("steps", steps);
+      localStorage.setItem("calories", calories);
+      updateDisplay();
+      lastStepTime = now;
     }
+
+    last = acc;
+  });
+}
+
 
     updateDisplay();
     startTracking();

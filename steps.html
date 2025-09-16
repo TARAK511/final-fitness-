@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Step & Calorie Counter</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      padding: 2rem; 
+      background: #111; 
+      color: #eee;
+    }
+    h1 { color: #00ff99; }
+    .counter { font-size: 2rem; margin: 1rem 0; }
+    .note { font-size: 0.9rem; color: #aaa; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+  <h1>🚶 Step & Calorie Tracker</h1>
+  <div class="counter">Steps: <span id="steps">0</span></div>
+  <div class="counter">Calories: <span id="calories">0</span> kcal</div>
+
+  <script>
+    let steps = 0;
+    let calories = 0;
+
+    // user settings (can be taken from profile.html later)
+    const weightKg = 70;      // user weight (change later to dynamic input)
+    const stepLengthM = 0.78; // avg step length in meters
+
+    let lastAccel = {x:0,y:0,z:0};
+    let stepThreshold = 12; // sensitivity threshold
+
+    if ('DeviceMotionEvent' in window) {
+      window.addEventListener('devicemotion', (e) => {
+        let acc = e.accelerationIncludingGravity;
+        if (!acc) return;
+
+        let delta = Math.abs(acc.x - lastAccel.x) + Math.abs(acc.y - lastAccel.y) + Math.abs(acc.z - lastAccel.z);
+
+        if (delta > stepThreshold) {
+          steps++;
+          calories = steps * stepLengthM * weightKg * 0.0005;
+
+          document.getElementById('steps').innerText = steps;
+          document.getElementById('calories').innerText = calories.toFixed(2);
+        }
+        lastAccel = acc;
+      });
+    } else {
+      alert("Motion sensors not supported on this device/browser.");
+    }
+  </script>
+
+  <div class="note">📱 Works best on mobile browsers with motion sensors.</div>
+</body>
+</html>
